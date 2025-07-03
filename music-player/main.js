@@ -135,7 +135,12 @@ const player = {
 
         this.audioElement.onended = this.handleEndSong.bind(this);
         this.nextBtn.onclick = () => {
-            this.handleChangeIndex(1);
+            if (this.isRandom) {
+                const randomIndex = this.handleRandomSongIndex();
+                this.handleChangeIndex(randomIndex);
+            } else {
+                this.handleChangeIndex(1);
+            }
             this.loadCurrentSong();
             this.render();
         };

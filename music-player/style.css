@@ -299,3 +299,98 @@ body {
         height: 48px;
     }
 }
+
+@media (max-width: 992px) {
+    .music-player {
+        flex-direction: column;
+        width: 90vw;
+        height: auto;
+        padding: 16px;
+    }
+
+    .left-section {
+        padding-right: 0;
+        width: 100%;
+    }
+
+    .album-art {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+    }
+
+    .controls {
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .volumn-wrapper {
+        position: relative;
+        right: 0;
+        top: auto;
+        transform: none;
+        justify-content: flex-end;
+    }
+
+    .progress-volumn-wrap {
+        position: absolute;
+        top: -100%;
+        right: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .music-player {
+        width: 100vw;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .album-art {
+        width: 100%;
+        height: auto;
+        max-height: 300px;
+        aspect-ratio: 1 / 1;
+    }
+
+    .song-info h2 {
+        font-size: 1.4em;
+    }
+
+    .song-info p {
+        font-size: 1em;
+    }
+
+    .control-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9em;
+    }
+
+    .control-btn.play-pause {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2em;
+    }
+
+    .playlist {
+        padding: 16px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .playlist-item img {
+        width: 42px;
+        height: 42px;
+        margin-right: 12px;
+    }
+
+    .playlist-item span {
+        font-size: 1em;
+    }
+
+    .playlist-item span.artist {
+        font-size: 0.85em;
+    }
+}
