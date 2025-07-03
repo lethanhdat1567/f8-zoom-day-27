@@ -103,8 +103,8 @@ const player = {
     ],
     currentIndex: 0,
     isPlaying: false,
-    isRepeat: false,
-    isRandom: false,
+    isRepeat: localStorage.getItem("repeat") === "true",
+    isRandom: localStorage.getItem("random") === "true",
 
     // Element
     audioElement: $("#audio"),
@@ -133,20 +133,7 @@ const player = {
         this.audioElement.ontimeupdate = this.handleProgress.bind(this);
         this.progressElement.oninput = this.handleChangeTime.bind(this);
 
-        this.audioElement.onended = () => {
-            if (this.isRepeat) {
-                this.audioElement.load();
-            } else {
-                if (this.isRandom) {
-                    const randomIndex = this.handleRandomSongIndex();
-                    this.handleChangeIndex(randomIndex);
-                } else {
-                    this.handleChangeIndex(1);
-                }
-                this.loadCurrentSong();
-                this.render();
-            }
-        };
+        this.audioElement.onended = this.handleEndSong.bind(this);
         this.nextBtn.onclick = () => {
             this.handleChangeIndex(1);
             this.loadCurrentSong();
@@ -161,16 +148,32 @@ const player = {
         this.repeatBtn.onclick = () => {
             this.isRepeat = !this.isRepeat;
             this.repeatBtn.classList.toggle("active", this.isRepeat);
+            localStorage.setItem("repeat", JSON.stringify(this.isRepeat));
         };
         this.shuffleBtn.onclick = () => {
             this.isRandom = !this.isRandom;
             this.shuffleBtn.classList.toggle("active", this.isRandom);
+            localStorage.setItem("random", JSON.stringify(this.isRandom));
         };
 
         this.volumnProgress.oninput = () => {
             const volumeValue = this.volumnProgress.value / 100;
             this.audioElement.volume = volumeValue;
             this.volumnProgress.style.background = `linear-gradient(to right, #ccc ${this.volumnProgress.value}%, #4a4a4a ${this.volumnProgress.value}%)`;
+        };
+
+        document.onkeydown = (event) => {
+            const key = event.code;
+
+            if (key === "Space") {
+                this.playBtn.click();
+            }
+            if (key === "ArrowLeft") {
+                this.prevBtn.click();
+            }
+            if (key === "ArrowRight") {
+                this.nextBtn.click();
+            }
         };
     },
 
@@ -248,6 +251,21 @@ const player = {
         return randomIndex;
     },
 
+    handleEndSong() {
+        if (this.isRepeat) {
+            this.audioElement.load();
+        } else {
+            if (this.isRandom) {
+                const randomIndex = this.handleRandomSongIndex();
+                this.handleChangeIndex(randomIndex);
+            } else {
+                this.handleChangeIndex(1);
+            }
+            this.loadCurrentSong();
+            this.render();
+        }
+    },
+
     render() {
         const html = this.songs
             .map((song, index) => {
@@ -269,6 +287,9 @@ const player = {
 
         this.songItemsElement = $$(".playlist-item");
         this.handleChoiceSong();
+
+        this.repeatBtn.classList.toggle("active", this.isRepeat);
+        this.shuffleBtn.classList.toggle("active", this.isRandom);
     },
 
     handleTimer(time) {
